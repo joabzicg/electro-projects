@@ -1,4 +1,4 @@
 # Electro projects
 
 Stuff that I did in the past years
-MIPS, Arduino, Circuits, etc
+MIPS Assembly, Arduino, Circuits, etc
