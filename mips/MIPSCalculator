@@ -1,0 +1,586 @@
+#Advanced Calculator
+.data 
+operacao: .asciiz "Qual operacaoo voce quer fazer? (Digite 0 para adi, 1 para sub, 2 para mult, 3 para divi): \n"
+numero1: .asciiz "Digite o primeiro numero: \n"
+numero2: .asciiz "Digite o segundo numero: \n"
+resultado: .asciiz "O resultado da operacao �: \n"
+error: .asciiz "ERRO! Coloque apenas numeros entre 0 e 3 para selecionar uma opera��o! \n"
+outra: .asciiz "\n Deseja fazer outra operacao com esse resultado? (digite 0 para sim, ou outro caracter/n�mero para n�o) \n"
+.text
+#Selecionando qual operacao fazer.
+main:
+li $v0, 4
+la $a0, operacao
+syscall
+li $v0, 5
+syscall
+move $t0, $v0
+#Fazendo as condicoes para determinar qual e o tipo da operacao:
+beq $t0, 0, adicao
+beq $t0, 1, subtracao
+beq $t0, 2, multiplicacao
+beq $t0, 3, divisao
+#Se o numero colocado nao for igual a nenhum pedido na string "operacao", o programa ira pular para o erro e reiniciar o programa.
+j erro
+adicao:
+#Sendo $t0, igual a = 0 (Somar)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+add $t3, $t1, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t3
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+subtracao:
+#Sendo $t0, igual a = 1 (Subtrair)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+sub $t3, $t1, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t3
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+multiplicacao:
+#Sendo $t0, igual a = 2 (Multiplicar)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+mult $t1, $t2
+mfhi $a2
+mflo $a3
+add $t3, $a2, $a3
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t3
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+divisao:
+#Sendo $t0, igual a = 3 (Dividir)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+div $t1, $t2
+mfhi $t4
+mflo $t3
+add $t5, $t3, $t4
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t5
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+#Erro1:
+erro:
+li $v0, 4
+la $a0, error
+syscall
+j main
+#fim do programa:
+fim:
+li $v0, 10
+syscall
+novamente:
+li $v0, 4
+la $a0, operacao
+syscall
+li $v0, 5
+syscall
+move $t0, $v0
+#Fazendo as condicoes para determinar qual e o tipo da operacao:
+beq $t0, 0, adicao2
+beq $t0, 1, subtracao2
+beq $t0, 2, multiplicacao2
+beq $t0, 3, divisao2
+#Se o numero colocado nao for igual a nenhum pedido na string "operacao", o programa ira pular para o erro e reiniciar o programa.
+j erro2
+adicao2:
+#Sendo $t0, igual a = 0 (Somar)
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+add $t4, $t3, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+subtracao2:
+#Sendo $t0, igual a = 1 (Subtrair)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+sub $t4, $t3, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+multiplicacao2:
+#Sendo $t0, igual a = 2 (Multiplicar)
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+move $t2, $v0
+mult $t3, $t2
+mfhi $a2
+mflo $a3
+add $t4, $a2, $a3
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+divisao2:
+#Sendo $t0, igual a = 3 (Dividir)
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+div $t2, $t1
+mfhi $t4
+mflo $t3
+add $t5, $t3, $t4
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t5
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+erro2:
+li $v0, 4
+la $a0, error
+syscall
+j novamente
+
+#Calculadora avan�ada
+.data 
+operacao: .asciiz "Qual operacaoo voce quer fazer? (Digite 0 para adi, 1 para sub, 2 para mult, 3 para divi): \n"
+numero1: .asciiz "Digite o primeiro numero: \n"
+numero2: .asciiz "Digite o segundo numero: \n"
+resultado: .asciiz "O resultado da operacao �: \n"
+error: .asciiz "ERRO! Coloque apenas numeros entre 0 e 3 para selecionar uma opera��o! \n"
+outra: .asciiz "\n Deseja fazer outra operacao com esse resultado? (digite 0 para sim, ou outro caracter/n�mero para n�o) \n"
+.text
+#Selecionando qual operacao fazer.
+main:
+li $v0, 4
+la $a0, operacao
+syscall
+li $v0, 5
+syscall
+move $t0, $v0
+#Fazendo as condicoes para determinar qual e o tipo da operacao:
+beq $t0, 0, adicao
+beq $t0, 1, subtracao
+beq $t0, 2, multiplicacao
+beq $t0, 3, divisao
+#Se o numero colocado nao for igual a nenhum pedido na string "operacao", o programa ira pular para o erro e reiniciar o programa.
+j erro
+adicao:
+#Sendo $t0, igual a = 0 (Somar)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+add $t3, $t1, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t3
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+subtracao:
+#Sendo $t0, igual a = 1 (Subtrair)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+sub $t3, $t1, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t3
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+multiplicacao:
+#Sendo $t0, igual a = 2 (Multiplicar)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+mult $t1, $t2
+mfhi $a2
+mflo $a3
+add $t3, $a2, $a3
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t3
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+divisao:
+#Sendo $t0, igual a = 3 (Dividir)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+div $t1, $t2
+mfhi $t4
+mflo $t3
+add $t5, $t3, $t4
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t5
+syscall
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+#Erro1:
+erro:
+li $v0, 4
+la $a0, error
+syscall
+j main
+#fim do programa:
+fim:
+li $v0, 10
+syscall
+novamente:
+li $v0, 4
+la $a0, operacao
+syscall
+li $v0, 5
+syscall
+move $t0, $v0
+#Fazendo as condicoes para determinar qual e o tipo da operacao:
+beq $t0, 0, adicao2
+beq $t0, 1, subtracao2
+beq $t0, 2, multiplicacao2
+beq $t0, 3, divisao2
+#Se o numero colocado nao for igual a nenhum pedido na string "operacao", o programa ira pular para o erro e reiniciar o programa.
+j erro2
+adicao2:
+#Sendo $t0, igual a = 0 (Somar)
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+add $t4, $t3, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+subtracao2:
+#Sendo $t0, igual a = 1 (Subtrair)
+li $v0, 4
+la $a0, numero1
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+sub $t4, $t3, $t2
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+multiplicacao2:
+#Sendo $t0, igual a = 2 (Multiplicar)
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t1, $v0
+move $t2, $v0
+mult $t3, $t2
+mfhi $a2
+mflo $a3
+add $t4, $a2, $a3
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t4
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+divisao2:
+#Sendo $t0, igual a = 3 (Dividir)
+li $v0, 4
+la $a0, numero2
+syscall
+li $v0, 5
+syscall
+move $t2, $v0
+div $t2, $t1
+mfhi $t4
+mflo $t3
+add $t5, $t3, $t4
+li $v0, 4
+la $a0, resultado
+syscall
+li $v0, 1
+move $a0, $t5
+syscall
+move $t3, $t4
+#perguntando se quer outra:
+li $v0, 4
+la $a0, outra
+syscall
+li $v0, 5
+syscall
+move $t7, $v0
+beq $t7, 0, novamente
+j fim
+erro2:
+li $v0, 4
+la $a0, error
+syscall
+j novamente
+
